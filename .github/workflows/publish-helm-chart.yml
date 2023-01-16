@@ -10,7 +10,9 @@ on:
         required: true
         type: string
 
+
 jobs:
+  environment: ${{ inputs.GLUEOPS_ENV }}
   publish:
     runs-on: ubuntu-latest
     steps:
