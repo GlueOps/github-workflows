@@ -1,8 +1,8 @@
 name: Publish Development Helm Charts
+
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+
 jobs:
   publish:
     runs-on: ubuntu-latest
