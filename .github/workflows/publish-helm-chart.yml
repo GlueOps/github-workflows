@@ -12,9 +12,9 @@ on:
 
 
 jobs:
-  environment: ${{ inputs.GLUEOPS_ENV }}
   publish:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.GLUEOPS_ENV }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
