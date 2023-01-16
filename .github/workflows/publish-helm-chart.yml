@@ -53,4 +53,4 @@ jobs:
 
           done
 
-          helm s3 reindex --relative $HELM_CHART_REPO_NAME
+          helm s3 reindex --acl="public-read" --relative $HELM_CHART_REPO_NAME
