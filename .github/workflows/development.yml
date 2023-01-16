@@ -24,7 +24,32 @@ jobs:
           helm-version: "v3.10.1"
 
       - name: Package and Publish
-        run: bash .github/workflows/deploy.sh
         env:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           GLUEOPS_ENV: "development"
+        run: |
+        export AWS_REGION=us-west-2
+        
+        status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.us-west-2.amazonaws.com/${group}/index.yaml`
+        if [ "$status_code" == "404" ]; then
+            helm s3 init s3://$S3_BUCKET_NAME/$group
+        fi
+        
+        helm repo add $group s3://$S3_BUCKET_NAME/$group
+
+        for D in $(ls -d */); do
+            helm package --dependency-update $D
+        done
+
+        for F in $(ls -f *.tgz); do
+            if [ "$GLUEOPS_ENV" == "development" ]; then
+                helm s3 push --acl="public-read" --relative $F $group --force
+            fi
+
+            if [ "$GLUEOPS_ENV" == "production" ]; then
+                helm s3 push --acl="public-read" --relative $F $group --ignore-if-exists
+            fi
+
+        done
+
+
