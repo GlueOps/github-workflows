@@ -34,7 +34,6 @@ jobs:
       - name: Package and Publish
         env:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-          GLUEOPS_ENV: ${{ inputs.GLUEOPS_ENV }}
           HELM_CHART_REPO_NAME: ${{ inputs.HELM_CHART_REPO_NAME }}
         run: |
           export AWS_REGION=us-west-2
@@ -49,12 +48,9 @@ jobs:
           helm package --dependency-update .
 
           for F in $(ls -f *.tgz); do
-              if [ "$GLUEOPS_ENV" == "development" ]; then
-                  helm s3 push --acl="public-read" --relative $F $HELM_CHART_REPO_NAME --force
-              fi
 
-              if [ "$GLUEOPS_ENV" == "production" ]; then
-                  helm s3 push --acl="public-read" --relative $F $HELM_CHART_REPO_NAME --ignore-if-exists
-              fi
+            helm s3 push --acl="public-read" --relative $F $HELM_CHART_REPO_NAME
 
           done
+
+          helm s3 reindex $HELM_CHART_REPO_NAME
