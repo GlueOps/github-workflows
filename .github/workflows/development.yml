@@ -27,6 +27,7 @@ jobs:
         env:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           GLUEOPS_ENV: "development"
+          group: "platform"
         run: |
           export AWS_REGION=us-west-2
           
