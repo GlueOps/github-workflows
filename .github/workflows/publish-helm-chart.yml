@@ -45,8 +45,12 @@ jobs:
           helm-docs -t README.md.gotmpl
           git config --global user.email "github@glueops.dev"
           git config --global user.name "GlueOps"
-          git add -A
-          git commit -m "docs: automated helm-docs action"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "docs: automated helm-docs action"
+          else
+            echo "No changes detected. Nothing to commit."
+          fi
           git push
 
       - name: Configure AWS Credentials
