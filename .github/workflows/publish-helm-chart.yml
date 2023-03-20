@@ -18,14 +18,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
-      - name: Install Helm Docs
-        uses: envoy/install-helm-docs@v1.0.0
-        with:
-          version: 1.11.0
       
       - name: Generate and Commit helm-docs
         run: |
+          wget wget https://github.com/norwoodj/helm-docs/releases/download/v1.11.0/helm-docs_1.11.0_Linux_x86_64.tar.gz
+          tar --extract --file=helm-docs_1.11.0_Linux_x86_64.tar.gz helm-docs
+          rm helm-docs_1.11.0_Linux_x86_64.tar.gz
+          
           echo '{{ template "chart.header" . }}
           {{ template "chart.deprecationWarning" . }}
 
@@ -42,7 +41,8 @@ jobs:
           {{ template "chart.requirementsSection" . }}
 
           {{ template "chart.valuesSection" . }}' > README.md.gotmpl
-          helm-docs -t README.md.gotmpl
+          ./helm-docs -t README.md.gotmpl
+          rm helm-docs
           git config --global user.email "github@glueops.dev"
           git config --global user.name "GlueOps"
           if [ -n "$(git status --porcelain)" ]; then
