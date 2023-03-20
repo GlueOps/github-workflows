@@ -24,7 +24,7 @@ jobs:
         with:
           version: 1.11.0
       
-      - name: view changed files:
+      - name: view changed files
         run: |
           helm-docs
           git status
