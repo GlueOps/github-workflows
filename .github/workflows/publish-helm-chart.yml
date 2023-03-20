@@ -26,6 +26,7 @@ jobs:
       
       - name: view changed files:
         run: |
+          helm-docs
           git status
           git diff
           git add -A
