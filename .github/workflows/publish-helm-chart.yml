@@ -29,10 +29,8 @@ jobs:
           helm-docs
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          git status
-          git diff
           git add -A
-          git commit -m "test - helm docs"
+          git commit -m "docs: helm-docs automated action" --signoff
           git push
 
       - name: Configure AWS Credentials
