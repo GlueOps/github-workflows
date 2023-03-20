@@ -22,6 +22,7 @@ jobs:
       - name: Generate Helm Docs
         uses: shaybentk/helm-docs-action@v0.0.1
         with:
+          working-dir: .
           git-push: "true"
 
       - name: Configure AWS Credentials
