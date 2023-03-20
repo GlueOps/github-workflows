@@ -48,10 +48,10 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
             git commit -m "docs: automated helm-docs action"
+            git push
           else
             echo "No changes detected. Nothing to commit."
           fi
-          git push
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
