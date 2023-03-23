@@ -2,28 +2,31 @@ name: Publish Docker Image to ghcr
 
 on:
   workflow_call:
-    secrets:
+    inputs:
       github_actor:
         required: true
         description: ref - github.actor
-      gh_token:
-        required: true
-        description:  ref - secrets.GITHUB_TOKEN
+        type: string
       github_repository_owner_part_slug:
         required: true
         description: ref - env.GITHUB_REPOSITORY_OWNER_PART_SLUG
+        type: string
       github_repository_name_part_slug:
         required: true
         description: ref - env.GITHUB_REPOSITORY_NAME_PART_SLUG
+        type: string
       github_ref_slug:
         required: true
         description: ref - env.GITHUB_REF_SLUG
+        type: string
       github_sha:
         required: true
         description: ref - github.sha
+        type: string
       steps_meta_outputs_labels:
         required: true
         description: ref - steps.meta.outputs.labels
+        type: string
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Registry
@@ -44,8 +47,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ secrets.github_actor }}
-          password: ${{ secrets.gh_token }}
+          username: ${{ inputs.github_actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate Variables for Tags
         uses: rlespinasse/github-slug-action@v3.x
@@ -55,5 +58,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: "ghcr.io/${{ secrets.github_repository_owner_part_slug }}/${{ secrets.github_repository_name_part_slug }}:${{ secrets.github_ref_slug }},ghcr.io/${{ secrets.github_repository_owner_part_slug }}/${{ secrets.github_repository_name_part_slug }}:${{ secrets.github_sha }}" 
-          labels: ${{ secrets.steps_meta_outputs_labels }}
+          tags: "ghcr.io/${{ inputs.github_repository_owner_part_slug }}/${{ inputs.github_repository_name_part_slug }}:${{ inputs.github_ref_slug }},ghcr.io/${{ inputs.github_repository_owner_part_slug }}/${{ inputs.github_repository_name_part_slug }}:${{ inputs.github_sha }}" 
+          labels: ${{ inputs.steps_meta_outputs_labels }}
