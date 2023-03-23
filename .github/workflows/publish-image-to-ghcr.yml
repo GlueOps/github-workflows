@@ -1,7 +1,14 @@
-name: Publish Docker Image to ghcr
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Publish Docker image
 
 on:
-  workflow_call:
+  push:
+    tags:
+      - '*'
 
 jobs:
   push_to_registry:
@@ -15,6 +22,15 @@ jobs:
 
       - name: Check our repo
         uses: actions/checkout@v3
+
+      - name: clone prometheus/alertmanager
+        run: git clone --depth 1 --branch v0.25.0 https://github.com/prometheus/alertmanager.git build 
+
+      - name: overwrite with our custom code
+        run: cp -r customizations/* build/
+        
+      - name: build artifacts
+        run: cd build && make build-all && cd ..
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
