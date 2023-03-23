@@ -3,25 +3,25 @@ name: Publish Docker Image to ghcr
 on:
   workflow_call:
     secrets:
-      GITHUB_ACTOR:
+      github_actor:
         required: true
         description: ref - github.actor
-      #GITHUB_TOKEN:
-       # required: true
-        #description: ref - secrets.GITHUB_TOKEN
-      GITHUB_REPOSITORY_OWNER_PART_SLUG:
+      github_token:
+        required: true
+        description:  ref - secrets.GITHUB_TOKEN
+      github_repository_owner_part_slug:
         required: true
         description: ref - env.GITHUB_REPOSITORY_OWNER_PART_SLUG
-      GITHUB_REPOSITORY_NAME_PART_SLUG:
+      github_repository_name_part_slug:
         required: true
         description: ref - env.GITHUB_REPOSITORY_NAME_PART_SLUG
-      GITHUB_REF_SLUG:
+      github_ref_slug:
         required: true
         description: ref - env.GITHUB_REF_SLUG
-      GITHUB_SHA:
+      github_sha:
         required: true
         description: ref - github.sha
-      STEPS_META_OUTPUTS_LABELS:
+      steps_meta_outputs_labels:
         required: true
         description: ref - steps.meta.outputs.labels
 jobs:
@@ -44,8 +44,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ secrets.GITHUB_ACTOR }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.github_actor }}
+          password: ${{ secrets.github_token }}
       
       - name: Generate Variables for Tags
         uses: rlespinasse/github-slug-action@v3.x
@@ -55,5 +55,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: "ghcr.io/${{ secrets.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ secrets.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ secrets.GITHUB_REF_SLUG }},ghcr.io/${{ secrets.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ secrets.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ secrets.GITHUB_SHA }}" 
-          labels: ${{ secrets.STEPS_META_OUTPUTS_LABELS }}
+          tags: "ghcr.io/${{ secrets.github_repository_owner_part_slug }}/${{ secrets.github_repository_name_part_slug }}:${{ secrets.github_ref_slug }},ghcr.io/${{ secrets.github_repository_owner_part_slug }}/${{ secrets.github_repository_name_part_slug }}:${{ secrets.github_sha }}" 
+          labels: ${{ secrets.steps_meta_outputs_labels }}
