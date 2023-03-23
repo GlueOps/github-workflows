@@ -58,5 +58,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: "ghcr.io/${{ inputs.github_repository_owner_part_slug }}/${{ inputs.github_repository_name_part_slug }}:${{ inputs.github_ref_slug }},ghcr.io/${{ inputs.github_repository_owner_part_slug }}/${{ inputs.github_repository_name_part_slug }}:${{ inputs.github_sha }}" 
-          labels: ${{ inputs.steps_meta_outputs_labels }}
+          tags: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }},ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ github.sha }}" 
+          labels: ${{ steps.meta.outputs.labels }}
