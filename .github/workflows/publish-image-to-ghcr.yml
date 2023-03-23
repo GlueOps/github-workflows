@@ -6,7 +6,7 @@ on:
       github_actor:
         required: true
         description: ref - github.actor
-      github_token:
+      gh_token:
         required: true
         description:  ref - secrets.GITHUB_TOKEN
       github_repository_owner_part_slug:
@@ -45,7 +45,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ secrets.github_actor }}
-          password: ${{ secrets.github_token }}
+          password: ${{ secrets.gh_token }}
       
       - name: Generate Variables for Tags
         uses: rlespinasse/github-slug-action@v3.x
