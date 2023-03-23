@@ -2,31 +2,7 @@ name: Publish Docker Image to ghcr
 
 on:
   workflow_call:
-#     inputs:
-#       github_actor:
-#         required: true
-#         description: ref - github.actor
-#         type: string
-#       github_repository_owner_part_slug:
-#         required: true
-#         description: ref - env.GITHUB_REPOSITORY_OWNER_PART_SLUG
-#         type: string
-#       github_repository_name_part_slug:
-#         required: true
-#         description: ref - env.GITHUB_REPOSITORY_NAME_PART_SLUG
-#         type: string
-#       github_ref_slug:
-#         required: true
-#         description: ref - env.GITHUB_REF_SLUG
-#         type: string
-#       github_sha:
-#         required: true
-#         description: ref - github.sha
-#         type: string
-#       steps_meta_outputs_labels:
-#         required: true
-#         description: ref - steps.meta.outputs.labels
-#         type: string
+
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Registry
