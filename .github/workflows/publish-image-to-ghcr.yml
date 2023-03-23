@@ -6,9 +6,9 @@ on:
       GITHUB_ACTOR:
         required: true
         description: ref - github.actor
-      GITHUB_TOKEN:
-        required: true
-        description: ref - secrets.GITHUB_TOKEN
+      #GITHUB_TOKEN:
+       # required: true
+        #description: ref - secrets.GITHUB_TOKEN
       GITHUB_REPOSITORY_OWNER_PART_SLUG:
         required: true
         description: ref - env.GITHUB_REPOSITORY_OWNER_PART_SLUG
