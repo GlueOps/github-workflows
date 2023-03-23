@@ -27,7 +27,7 @@ on:
 #         required: true
 #         description: ref - steps.meta.outputs.labels
 #         type: string
-# jobs:
+jobs:
   push_to_registry:
     name: Push Docker image to Docker Registry
     runs-on: ubuntu-latest
