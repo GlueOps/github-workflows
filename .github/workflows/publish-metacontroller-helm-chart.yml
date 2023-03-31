@@ -103,7 +103,11 @@ jobs:
 
       - name: Check in Helm Docs
         run: |
+          ls
+          pwd
           cd ../../../..
+          ls
+          pwd
           cp metacontroller/deploy/helm/metacontroller/README.md .
           git config --global user.email "github@glueops.dev"
           git config --global user.name "GlueOps"
