@@ -61,6 +61,8 @@ jobs:
 
           {{ template "chart.valuesSection" . }}' > README.md.gotmpl
           helm-docs -t README.md.gotmpl
+          ls
+          pwd
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
