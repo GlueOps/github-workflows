@@ -39,8 +39,8 @@ jobs:
         with:
           version: 1.11.0
 
-      - name: Navigate to Helm Directory
-        run: cd metacontroller/deploy/helm/metacontroller/
+      # - name: Navigate to Helm Directory
+      #   run: cd metacontroller/deploy/helm/metacontroller/
 
       - name: Generate helm-docs
         run: |
