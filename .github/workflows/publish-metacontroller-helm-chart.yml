@@ -99,7 +99,7 @@ jobs:
 
           done
 
-          helm s3 reindex --acl="public-read" --relative $HELM_CHART_REPO_NAME
+          helm s3 reindex --acl="public-read" --relative $HELM_CHART_REPO_NAME --force
 
       - name: Check in Helm Docs
         run: |
