@@ -107,7 +107,9 @@ jobs:
       - name: Check in Helm Docs
         run: |
           cp /home/runner/work/platform-helm-chart-metacontroller/platform-helm-chart-metacontroller/metacontroller/deploy/helm/metacontroller/README.md ..
+          pwd
           cd ..
+          pwd
           git config --global user.email "github@glueops.dev"
           git config --global user.name "GlueOps"
           if [ -n "$(git status --porcelain)" ]; then
