@@ -81,6 +81,8 @@ jobs:
           AWS_REGION: ${{ inputs.AWS_REGION}}
         run: |
           export AWS_REGION=${AWS_REGION}
+          ls
+          pwd
           
           status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${HELM_CHART_REPO_NAME}/index.yaml`
           if [ "$status_code" == "404" ]; then
