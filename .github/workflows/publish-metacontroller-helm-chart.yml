@@ -12,7 +12,7 @@ on:
       HELM_CHART_REPO_NAME:
         required: true
         type: string
-      AWS_REGION:
+      AWSREGION:
         default: us-west-2
 
 jobs:
@@ -64,7 +64,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: $${{ inputs.AWS_REGION }}
+          aws-region: $${{ inputs.AWSREGION }}
 
       - name: Set up Helm
         uses: mamezou-tech/setup-helmfile@v1.0.0
@@ -75,7 +75,7 @@ jobs:
         env:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           HELM_CHART_REPO_NAME: ${{ inputs.HELM_CHART_REPO_NAME }}
-          AWS__REGION: ${{ inputs.AWS_REGION}}
+          AWS__REGION: ${{ inputs.AWSREGION}}
         run: |
           export AWS_REGION=${AWS__REGION}
           
