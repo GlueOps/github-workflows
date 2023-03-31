@@ -63,6 +63,7 @@ jobs:
           helm-docs -t README.md.gotmpl
           ls
           pwd
+          ls metacontroller/deploy/helm/metacontroller
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
