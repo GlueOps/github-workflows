@@ -12,7 +12,7 @@ on:
       HELM_CHART_REPO_NAME:
         required: true
         type: string
-      AWSREGION:
+      AWS_REGION:
         default: us-west-2
         required: false
         type: string
@@ -66,7 +66,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: $${{ inputs.AWSREGION }}
+          aws-region: $${{ inputs.AWS_REGION }}
 
       - name: Set up Helm
         uses: mamezou-tech/setup-helmfile@v1.0.0
@@ -77,11 +77,11 @@ jobs:
         env:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           HELM_CHART_REPO_NAME: ${{ inputs.HELM_CHART_REPO_NAME }}
-          AWS__REGION: ${{ inputs.AWSREGION}}
+          AWS_REGION: ${{ inputs.AWS_REGION}}
         run: |
-          export AWS_REGION=${AWS__REGION}
+          export AWS_REGION=${AWS_REGION}
           
-          status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.${AWS__REGION}.amazonaws.com/${HELM_CHART_REPO_NAME}/index.yaml`
+          status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${HELM_CHART_REPO_NAME}/index.yaml`
           if [ "$status_code" == "404" ]; then
               helm s3 init s3://$S3_BUCKET_NAME/$HELM_CHART_REPO_NAME
           fi
