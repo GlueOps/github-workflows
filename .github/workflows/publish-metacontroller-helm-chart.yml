@@ -21,6 +21,7 @@ jobs:
   publish_chart:
     name: Publish Metacontroller Helm Chart
     runs-on: ubuntu-latest
+    environment: ${{ inputs.GLUEOPS_ENV }}
     steps:
       - uses: actions/setup-go@v4
         with:
