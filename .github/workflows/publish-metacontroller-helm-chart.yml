@@ -107,7 +107,7 @@ jobs:
           git config --global user.email "github@glueops.dev"
           git config --global user.name "GlueOps"
           git add README.md
-          if $(git status --porcelain | grep -E '^[AM]') > /dev/null; then
+          if git status --porcelain | grep -E '^[AM]' > /dev/null; then
             git commit -m "docs: automated helm-docs action"
             git push
           else
