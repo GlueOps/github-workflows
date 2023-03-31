@@ -95,11 +95,11 @@ jobs:
 
           for F in $(ls -f *.tgz); do
 
-            helm s3 push --acl="public-read" --relative $F $HELM_CHART_REPO_NAME
+            helm s3 push --force --acl="public-read" --relative $F $HELM_CHART_REPO_NAME
 
           done
 
-          helm s3 reindex --acl="public-read" --relative $HELM_CHART_REPO_NAME --force
+          helm s3 reindex --acl="public-read" --relative $HELM_CHART_REPO_NAME
 
       - name: Check in Helm Docs
         run: |
