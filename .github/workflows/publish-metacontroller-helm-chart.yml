@@ -81,7 +81,7 @@ jobs:
         run: |
           export AWS_REGION=${AWS__REGION}
           
-          status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.$${{ AWS__REGION }}.amazonaws.com/${HELM_CHART_REPO_NAME}/index.yaml`
+          status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.${AWS__REGION}.amazonaws.com/${HELM_CHART_REPO_NAME}/index.yaml`
           if [ "$status_code" == "404" ]; then
               helm s3 init s3://$S3_BUCKET_NAME/$HELM_CHART_REPO_NAME
           fi
