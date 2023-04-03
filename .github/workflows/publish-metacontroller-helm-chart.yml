@@ -1,0 +1,112 @@
+name: Publish Metacontroller Helm Chart
+
+on:
+  workflow_call:
+    inputs:
+      VERSION_TAG:
+        required: true
+        type: string
+      GLUEOPS_ENV:
+        required: true
+        type: string
+      HELM_CHART_REPO_NAME:
+        required: true
+        type: string
+      AWS_REGION:
+        default: us-west-2
+        required: false
+        type: string
+
+jobs:
+  publish_chart:
+    name: Publish Metacontroller Helm Chart
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.GLUEOPS_ENV }}
+    steps:
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.19.7'
+      - run: go version
+
+      - name: Check out repo
+        uses: actions/checkout@v3
+
+      - name: clone metacontroller/metacontroller
+        run: git clone --depth 1 --branch ${{ inputs.VERSION_TAG }} https://github.com/metacontroller/metacontroller.git 
+
+      - name: Install Helm Docs
+        uses: envoy/install-helm-docs@v1.0.0
+        with:
+          version: 1.11.0
+
+      - name: Generate helm-docs
+        run: |
+          echo '{{ template "chart.header" . }}
+          {{ template "chart.deprecationWarning" . }}
+
+          {{ template "chart.badgesSection" . }}
+
+          {{ template "chart.description" . }}
+
+          {{ template "chart.homepageLine" . }}
+
+          {{ template "chart.maintainersSection" . }}
+
+          {{ template "chart.sourcesSection" . }}
+
+          {{ template "chart.requirementsSection" . }}
+
+          {{ template "chart.valuesSection" . }}' > README.md.gotmpl
+          helm-docs -t README.md.gotmpl
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.AWS_REGION }}
+
+      - name: Set up Helm
+        uses: mamezou-tech/setup-helmfile@v1.0.0
+        with:
+          helm-version: "v3.10.1"
+
+      - name: Package and Publish
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          HELM_CHART_REPO_NAME: ${{ inputs.HELM_CHART_REPO_NAME }}
+          AWS_REGION: ${{ inputs.AWS_REGION}}
+        run: |
+          export AWS_REGION=${AWS_REGION}
+          
+          cd metacontroller/deploy/helm/metacontroller
+          
+          status_code=`curl -s -o /dev/null -I -w "%{http_code}" https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${HELM_CHART_REPO_NAME}/index.yaml`
+          if [ "$status_code" == "404" ]; then
+              helm s3 init s3://$S3_BUCKET_NAME/$HELM_CHART_REPO_NAME
+          fi
+          
+          helm repo add $HELM_CHART_REPO_NAME s3://$S3_BUCKET_NAME/$HELM_CHART_REPO_NAME
+
+          helm package --dependency-update .
+
+          for F in $(ls -f *.tgz); do
+
+            helm s3 push --force --acl="public-read" --relative $F $HELM_CHART_REPO_NAME
+
+          done
+
+          helm s3 reindex --acl="public-read" --relative $HELM_CHART_REPO_NAME
+
+      - name: Check in Helm Docs
+        run: |
+          cp /home/runner/work/platform-helm-chart-metacontroller/platform-helm-chart-metacontroller/metacontroller/deploy/helm/metacontroller/README.md .
+          git config --global user.email "github@glueops.dev"
+          git config --global user.name "GlueOps"
+          git add README.md
+          if git status --porcelain | grep -E '^[AM]' > /dev/null; then
+            git commit -m "docs: automated helm-docs action"
+            git push
+          else
+            echo "No changes detected. Nothing to commit."
+          fi
