@@ -1,0 +1,88 @@
+name: GlueOps Tags CI
+
+on:
+  workflow_call:
+    inputs:
+      STACK_REPO:
+        required: true
+        type: string
+        description: 'The configuration repo for tenant applications on the GlueOps platform'
+      STACK_REPO_DEFAULT_BRANCH:
+        required: false
+        type: string
+        default: 'main'
+        description: 'The default branch of the configuration repo for tenant applications'
+      ENV:
+        required: true
+        type: string
+        description: 'The application environment, conforming to the naming convention in the configuration repo for tenant applications.'
+      CREATE_PR:
+        required: true
+        type: boolean
+        description: 'Create a PR for this change, or merge to the default branch.'
+    secrets:
+      GH_TOKEN:
+        required: true
+        type: string
+        description: 'GitHub PAT to enable tenant configuration repo access.'
+
+jobs:
+  update_config:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Checkout Config Repo
+      uses: actions/checkout@v3
+      with:
+        repository: '${{ github.repository_owner }}/${{ inputs.STACK_REPO }}'
+        path: './${{ inputs.STACK_REPO }}'
+        token: ${{ secrets.GH_TOKEN }}
+
+    - name: Install Dasel
+      run: |
+        wget https://github.com/TomWright/dasel/releases/download/v2.3.4/dasel_linux_amd64 -O dasel
+        chmod +x dasel
+        sudo mv dasel /usr/local/bin/
+
+    - name: Generate Tag for Release
+      id: TagRelease
+      if: github.event_name == 'release'
+      run: echo "::set-output name=TAG::${{ github.event.release.tag_name }}"
+    
+    - name: Generate Tag without Release
+      id: TagNoRelease
+      if: github.even_name != 'release'
+      run: |
+        TAG=$(git rev-parse --short HEAD)
+        echo "::set-output name=TAG::$TAG"
+
+    - name: Update Image Tag
+      working-directory: ./${{ inputs.STACK_REPO }}
+      run: |
+        set -e
+        TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
+        dasel put -f ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml -r yaml -v $TAG -s ".image.tag"
+        git config --global --add --bool push.autoSetupRemote true
+        git config --local user.email "automated-github-action@glueops.dev"
+        git config --local user.name "GlueOps bot"
+        git add -A
+        #TODO would like to add ", by ${{ github.event.pusher.name }}" to the comment below, but need to find the right variable
+        git commit -m "${{ github.event.repository.name }}: updating ${{ inputs.ENV }} tag to $TAG"
+
+    - name: Create PR if Desired
+      if: ${{ github.event.inputs.CREATE_PR == 'true' }}
+      uses: peter-evans/create-pull-request@v3
+      with:
+        token: ${{ secrets.GH_TOKEN }}
+        path: './${{ env.CONFIG_REPO }}'
+        title: '${{ github.event.repository.name }} > ${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
+        base: ${{ .inputs.STACK_REPO_DEFAULT_BRANCH }}
+        branch: '${{ github.event.repository.name }}/update-${{ inputs.ENV }}-image-tag-${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
+        body: "PR created via CI workflow in [${{ github.repository_owner }}/${{ github.event.repository.name }}](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }})"
+    
+    - name: Commit to Default Branch if PR not Desired
+      if: ${{ github.event.inputs.CREATE_PR == 'false' }}
+      run: git push
