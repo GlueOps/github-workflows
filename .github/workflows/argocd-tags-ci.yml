@@ -85,5 +85,5 @@ jobs:
     - name: Commit to Default Branch if PR not Desired
       if: ${{ github.event.inputs.CREATE_PR != 'true' }}
       run: |
-        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/owner/repo.git
+        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository_owner }}/${{ inputs.STACK_REPO }}.git
         git push
