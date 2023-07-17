@@ -14,11 +14,11 @@ on:
         description: 'The default branch of the configuration repo for tenant applications'
       ENV:
         required: true
-        type: boolean
+        type: string
         description: 'The application environment, conforming to the naming convention in the configuration repo for tenant applications.'
       CREATE_PR:
         required: true
-        type: string
+        type: bool
         description: 'Create a PR for this change, or merge to the default branch.'
     secrets:
       GH_TOKEN:
