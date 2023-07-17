@@ -38,7 +38,7 @@ jobs:
       with:
         repository: '${{ github.repository_owner }}/${{ inputs.STACK_REPO }}'
         path: './${{ inputs.STACK_REPO }}'
-        token: ${{ secrets.GH_TOKEN }}
+        token: '${{ secrets.GH_TOKEN }}'
 
     - name: Install Dasel
       run: |
