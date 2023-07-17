@@ -18,7 +18,7 @@ on:
         description: 'The application environment, conforming to the naming convention in the configuration repo for tenant applications.'
       CREATE_PR:
         required: true
-        type: string
+        type: boolean
         description: 'Create a PR for this change, or merge to the default branch.'
     secrets:
       GH_TOKEN:
@@ -60,7 +60,7 @@ jobs:
 
     - name: Update Image Tag for PR
       working-directory: ./${{ inputs.STACK_REPO }}
-      if: ${{ github.event.inputs.CREATE_PR == 'true' }}
+      if: ${{ github.event.inputs.CREATE_PR }}
       run: |
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
@@ -73,7 +73,7 @@ jobs:
         git commit -m "${{ github.event.repository.name }}: updating ${{ inputs.ENV }} tag to $TAG"
 
     - name: Create PR if Desired
-      if: ${{ github.event.inputs.CREATE_PR == 'true' }}
+      if: ${{ github.event.inputs.CREATE_PR }}
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.GH_TOKEN }}
@@ -84,7 +84,7 @@ jobs:
         body: "PR created via CI workflow in [${{ github.repository_owner }}/${{ github.event.repository.name }}](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }})"
     
     - name: Commit to Default Branch if PR not Desired
-      if: ${{ github.event.inputs.CREATE_PR != 'true' }} # == 'false' didn't work...
+      if: ${{ ! github.event.inputs.CREATE_PR }}
       working-directory: ./${{ inputs.STACK_REPO }}
       run: |
         set -e
