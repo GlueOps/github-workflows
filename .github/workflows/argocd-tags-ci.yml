@@ -45,19 +45,6 @@ jobs:
         wget https://github.com/TomWright/dasel/releases/download/v2.3.4/dasel_linux_amd64 -O dasel
         chmod +x dasel
         sudo mv dasel /usr/local/bin/
-    
-    # ## Testing
-    # - name: Test Outputs
-    #   run: |
-    #     # works for PR
-    #     echo "github.event.pull_request.user.login:  ${{ github.event.pull_request.user.login }}"
-    #     echo "github.event.commits[0].author.name ${{ github.event.commits[0].author.name }}"
-    #     # works for PR and release
-    #     echo "github.actor: ${{ github.actor }}"
-
-
-
-    ##
 
     - name: Generate Tag for Release
       id: TagRelease
