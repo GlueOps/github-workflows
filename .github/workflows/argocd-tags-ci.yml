@@ -23,7 +23,6 @@ on:
     secrets:
       GH_TOKEN:
         required: true
-        type: string
         description: 'GitHub PAT to enable tenant configuration repo access.'
 
 jobs:
