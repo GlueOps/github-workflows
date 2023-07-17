@@ -83,5 +83,5 @@ jobs:
         body: "PR created via CI workflow in [${{ github.repository_owner }}/${{ github.event.repository.name }}](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }})"
     
     - name: Commit to Default Branch if PR not Desired
-      if: ${{ github.event.inputs.CREATE_PR == 'false' }}
+      if: ${{ github.event.inputs.CREATE_PR != 'true' }}
       run: git push
