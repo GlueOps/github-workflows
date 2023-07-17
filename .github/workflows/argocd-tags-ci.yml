@@ -87,6 +87,8 @@ jobs:
       if: ${{ ! github.event.inputs.CREATE_PR }}
       working-directory: ./${{ inputs.STACK_REPO }}
       run: |
+        echo "eval bool: ${{ ! github.event.inputs.CREATE_PR }}"
+        echo "bool value ${{ ! github.event.inputs.CREATE_PR }}"
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
         dasel put -f ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml -r yaml -v $TAG -s ".image.tag"
