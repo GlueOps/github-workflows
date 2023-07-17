@@ -46,12 +46,14 @@ jobs:
         chmod +x dasel
         sudo mv dasel /usr/local/bin/
     
-    ## Testing
-    - name: Test Outputs
-      run: |
-        echo "github.event.pull_request.user.login:  ${{ github.event.pull_request.user.login }}"
-        echo "github.event.commits[0].author.name ${{ github.event.commits[0].author.name }}"
-        echo "github.actor: ${{ github.actor }}"
+    # ## Testing
+    # - name: Test Outputs
+    #   run: |
+    #     # works for PR
+    #     echo "github.event.pull_request.user.login:  ${{ github.event.pull_request.user.login }}"
+    #     echo "github.event.commits[0].author.name ${{ github.event.commits[0].author.name }}"
+    #     # works for PR and release
+    #     echo "github.actor: ${{ github.actor }}"
 
 
 
@@ -80,7 +82,7 @@ jobs:
         git config --local user.email "automated-github-action@glueops.dev"
         git config --local user.name "GlueOps bot"
         git add -A
-        git commit -m "${{ github.event.repository.name }}: updating ${{ inputs.ENV }} tag to $TAG"
+        git commit -m "${{ github.event.repository.name }}: updating ${{ inputs.ENV }} tag to $TAG, by ${{ github.actor }}"
 
     - name: Create PR if Desired
       if: ${{ inputs.CREATE_PR }}
