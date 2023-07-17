@@ -85,7 +85,6 @@ jobs:
     
     - name: Commit to Default Branch if PR not Desired
       if: ${{ github.event.inputs.CREATE_PR != 'true' }} # == 'false' didn't work...
-    - name: Update Image Tag for PR
       working-directory: ./${{ inputs.STACK_REPO }}
       run: |
         set -e
