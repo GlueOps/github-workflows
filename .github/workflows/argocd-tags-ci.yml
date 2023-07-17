@@ -77,7 +77,7 @@ jobs:
       with:
         token: ${{ secrets.GH_TOKEN }}
         path: './${{ inputs.STACK_REPO }}'
-        title: '${{ github.event.repository.name }} > ${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
+        title: '${{ github.event.repository.name }} [${{ inputs.ENV }}] > ${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
         base: ${{ inputs.STACK_REPO_DEFAULT_BRANCH }}
         branch: '${{ github.event.repository.name }}/update-${{ inputs.ENV }}-image-tag-${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
         body: "PR created via CI workflow in [${{ github.repository_owner }}/${{ github.event.repository.name }}](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }})"
