@@ -50,14 +50,14 @@ jobs:
       id: TagRelease
       if: github.event_name == 'release'
       run: |
-        echo "::set-output name=TAG::${{ github.event.release.tag_name }}"
+        echo "TAG=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
     
     - name: Generate Tag without Release
       id: TagNoRelease
       if: github.even_name != 'release'
       run: |
         TAG=$(git rev-parse --short HEAD)
-        echo "::set-output name=TAG::$TAG"
+        echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
     - name: Update Image Tag
       working-directory: ./${{ inputs.STACK_REPO }}
