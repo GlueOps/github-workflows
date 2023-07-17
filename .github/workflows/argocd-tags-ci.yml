@@ -88,7 +88,7 @@ jobs:
       working-directory: ./${{ inputs.STACK_REPO }}
       run: |
         echo "eval bool: ${{ ! github.event.inputs.CREATE_PR }}"
-        echo "bool value: ${{ github.event.inputs.CREATE_PR }}"
+        echo "bool value: ${{ fromJSON(github.event.inputs.CREATE_PR) }}"
         echo "env value: ${{ github.event.inputs.ENV }}"
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
