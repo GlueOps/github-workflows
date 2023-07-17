@@ -46,34 +46,30 @@ jobs:
         chmod +x dasel
         sudo mv dasel /usr/local/bin/
 
-    - name: Generate Tag and User for Release
+    - name: Generate Tag for Release
       id: TagRelease
       if: github.event_name == 'release'
       run: |
         echo "::set-output name=TAG::${{ github.event.release.tag_name }}"
-        echo "::set-output name=GH_USER::${{ github.event.release.user.login }}"
     
-    - name: Generate Tag and User without Release
+    - name: Generate Tag without Release
       id: TagNoRelease
       if: github.even_name != 'release'
       run: |
         TAG=$(git rev-parse --short HEAD)
         echo "::set-output name=TAG::$TAG"
-        echo "::set-output name=GH_USER::${{ github.event.commits[0].author.name }}"
 
     - name: Update Image Tag
       working-directory: ./${{ inputs.STACK_REPO }}
       run: |
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
-        GH_USER=${{ steps.TagRelease.outputs.GH_USER || steps.TagNoRelease.outputs.GH_USER }}
         dasel put -f ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml -r yaml -v $TAG -s ".image.tag"
         git config --global --add --bool push.autoSetupRemote true
         git config --local user.email "automated-github-action@glueops.dev"
         git config --local user.name "GlueOps bot"
         git add -A
-        #TODO would like to add ", by ${{ github.event.head.user.login }}" to the comment below, but need to find the right variable
-        git commit -m "${{ github.event.repository.name }}: updating ${{ inputs.ENV }} tag to $TAG, by $GH_USER"
+        git commit -m "${{ github.event.repository.name }}: updating ${{ inputs.ENV }} tag to $TAG"
 
     - name: Create PR if Desired
       if: ${{ inputs.CREATE_PR }}
