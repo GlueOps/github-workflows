@@ -64,7 +64,7 @@ jobs:
       run: |
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
-        yq -i '.image.tag = "$TAG"' ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml
+        yq -i ".image.tag = \"$TAG\"" ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml
         git config --global --add --bool push.autoSetupRemote true
         git config --local user.email "automated-github-action@glueops.dev"
         git config --local user.name "GlueOps bot"
