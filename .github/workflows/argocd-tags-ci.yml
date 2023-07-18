@@ -42,9 +42,9 @@ jobs:
 
     - name: Install yq
       run: |
-        wget https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64 -O /usr/bin/yq &&\
-        chmod +x /usr/bin/yq
-
+        wget https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64 -O yq
+        chmod +x yq
+        sudo mv yq /usr/bin/yq
     - name: Generate Tag for Release
       id: TagRelease
       if: github.event_name == 'release'
