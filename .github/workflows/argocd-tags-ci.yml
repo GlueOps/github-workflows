@@ -40,11 +40,11 @@ jobs:
         path: './${{ inputs.STACK_REPO }}'
         token: '${{ secrets.GH_TOKEN }}'
 
-    - name: Install Dasel
+    - name: Install yq
       run: |
-        wget https://github.com/TomWright/dasel/releases/download/v2.3.4/dasel_linux_amd64 -O dasel
-        chmod +x dasel
-        sudo mv dasel /usr/local/bin/
+        wget https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64 -O yq
+        chmod +x yq
+        sudo mv yq /usr/bin/yq
 
     - name: Generate Tag for Release
       id: TagRelease
@@ -64,7 +64,7 @@ jobs:
       run: |
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
-        dasel put -f ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml -r yaml -v $TAG -s ".image.tag"
+        yq -i ".image.tag = \"$TAG\"" ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml
         git config --global --add --bool push.autoSetupRemote true
         git config --local user.email "automated-github-action@glueops.dev"
         git config --local user.name "GlueOps bot"
