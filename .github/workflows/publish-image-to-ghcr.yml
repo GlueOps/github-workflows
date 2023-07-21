@@ -27,12 +27,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate Variables for Tags
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }},ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ github.sha }}" 
+          tags: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }},ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ github.sha }},ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_SHA_SHORT }}" 
           labels: ${{ steps.meta.outputs.labels }}
