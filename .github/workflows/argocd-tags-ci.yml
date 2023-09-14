@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       STACK_REPO:
-        required: true
+        required: false
         type: string
          default: 'deployment-configurations'
         description: 'The configuration repo for tenant applications on the GlueOps platform'
