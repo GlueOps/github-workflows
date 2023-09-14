@@ -6,7 +6,7 @@ on:
       STACK_REPO:
         required: false
         type: string
-         default: 'deployment-configurations'
+        default: 'deployment-configurations'
         description: 'The configuration repo for tenant applications on the GlueOps platform'
       STACK_REPO_DEFAULT_BRANCH:
         required: false
