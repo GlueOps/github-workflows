@@ -17,7 +17,7 @@ jobs:
     environment: ${{ inputs.GLUEOPS_ENV }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: Install Helm Docs
         uses: envoy/install-helm-docs@v1.0.0
@@ -61,9 +61,9 @@ jobs:
           aws-region: us-west-2
 
       - name: Set up Helm
-        uses: mamezou-tech/setup-helmfile@v1.0.0
+        uses: mamezou-tech/setup-helmfile@v1.2.0
         with:
-          helm-version: "v3.10.1"
+          helm-version: "v3.12.3"
 
       - name: Package and Publish
         env:
