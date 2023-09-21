@@ -11,7 +11,7 @@ jobs:
     environment: ${{ inputs.GLUEOPS_ENV }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: Install Helm Docs
         uses: envoy/install-helm-docs@v1.0.0
