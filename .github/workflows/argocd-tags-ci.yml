@@ -4,8 +4,9 @@ on:
   workflow_call:
     inputs:
       STACK_REPO:
-        required: true
+        required: false
         type: string
+        default: 'deployment-configurations'
         description: 'The configuration repo for tenant applications on the GlueOps platform'
       STACK_REPO_DEFAULT_BRANCH:
         required: false
@@ -21,7 +22,7 @@ on:
         type: boolean
         description: 'Create a PR for this change, or merge to the default branch.'
     secrets:
-      GH_TOKEN:
+      GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN:
         required: true
         description: 'GitHub PAT to enable tenant configuration repo access.'
 
@@ -38,7 +39,7 @@ jobs:
       with:
         repository: '${{ github.repository_owner }}/${{ inputs.STACK_REPO }}'
         path: './${{ inputs.STACK_REPO }}'
-        token: '${{ secrets.GH_TOKEN }}'
+        token: '${{ secrets.GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN }}'
 
     - name: Install yq
       run: |
@@ -75,7 +76,7 @@ jobs:
       if: ${{ inputs.CREATE_PR }}
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.GH_TOKEN }}
+        token: ${{ secrets.GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN }}
         path: './${{ inputs.STACK_REPO }}'
         title: '${{ github.event.repository.name }} [${{ inputs.ENV }}] > ${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
         base: ${{ inputs.STACK_REPO_DEFAULT_BRANCH }}
