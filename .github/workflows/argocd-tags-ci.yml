@@ -57,6 +57,7 @@ jobs:
       id: TagNoRelease
       if: github.even_name != 'release' && github.event.ref_type != 'tag'
       run: |
+        echo ${{ toJson(github) }}
         TAG=$(git rev-parse --short HEAD)
         echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
