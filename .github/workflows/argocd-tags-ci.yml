@@ -55,7 +55,7 @@ jobs:
 
     - name: Generate Tag without Release
       id: TagNoRelease
-      if: github.even_name != 'release'
+      if: github.even_name != 'release' && github.event.ref_type != 'tag'
       run: |
         TAG=$(git rev-parse --short HEAD)
         echo "TAG=$TAG" >> $GITHUB_OUTPUT
