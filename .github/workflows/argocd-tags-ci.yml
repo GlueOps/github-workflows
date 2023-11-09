@@ -49,13 +49,13 @@ jobs:
 
     - name: Generate Tag for Release
       id: TagRelease
-      if: github.event_name == 'release'
+      if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/')
       run: |
-        echo "TAG=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-    
+        echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+
     - name: Generate Tag without Release
       id: TagNoRelease
-      if: github.even_name != 'release'
+      if: github.even_name != 'release' && !startsWith(github.ref, 'refs/tags/')
       run: |
         TAG=$(git rev-parse --short HEAD)
         echo "TAG=$TAG" >> $GITHUB_OUTPUT
