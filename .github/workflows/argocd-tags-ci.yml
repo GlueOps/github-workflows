@@ -49,7 +49,7 @@ jobs:
 
     - name: Generate Tag for Release
       id: TagRelease
-      if: github.event_name == 'release' or github.event.ref_type == 'tag'
+      if: github.event_name == 'release' || github.event.ref_type == 'tag'
       run: |
         echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
 
