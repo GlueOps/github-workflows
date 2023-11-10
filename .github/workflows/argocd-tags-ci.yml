@@ -55,7 +55,7 @@ jobs:
         env
 
     - name: Create GlueOps Tags
-      uses: Glueops/github-actions-create-container-tags@feature/add-tag-creation-fallback
+      uses: Glueops/github-actions-create-container-tags@main
       id: create-tags
 
     - name: Get Container Tag for Release/Repository Tag
