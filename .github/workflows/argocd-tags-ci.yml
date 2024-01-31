@@ -3,6 +3,10 @@ name: GlueOps Tags CI
 on:
   workflow_call:
     inputs:
+      DEPLOYMENT_CONFIGS_APP_NAME:
+        required: false
+        type: string
+        default: ''
       STACK_REPO:
         required: false
         type: string
@@ -76,7 +80,8 @@ jobs:
       run: |
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
-        yq -i ".image.tag = \"$TAG\"" ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml
+        DEPLOYMENT_CONFIGS_APP_NAME=${{ inputs.DEPLOYMENT_CONFIGS_APP_NAME || github.event.repository.name }}
+        yq -i ".image.tag = \"$TAG\"" ./apps/$DEPLOYMENT_CONFIGS_APP_NAME/envs/${{ inputs.ENV }}/values.yaml
         git config --global --add --bool push.autoSetupRemote true
         git config --local user.email "automated-github-action@glueops.dev"
         git config --local user.name "GlueOps bot"
