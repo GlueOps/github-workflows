@@ -7,6 +7,7 @@ on:
         required: false
         type: string
         default: ''
+        description: 'Optional override if the app name in deployment configurations does not match the repo name.'
       STACK_REPO:
         required: false
         type: string
@@ -20,7 +21,7 @@ on:
       ENV:
         required: true
         type: string
-        description: 'The application environment, conforming to the naming convention in the configuration repo for tenant applications.'
+        description: 'The application environment, conforming to the naming convention in the deployment configuration repo for applications.'
       CREATE_PR:
         required: true
         type: boolean
@@ -28,7 +29,7 @@ on:
     secrets:
       GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN:
         required: true
-        description: 'GitHub PAT to enable tenant configuration repo access.'
+        description: 'GitHub PAT to enable deployment configuration repo access.'
 
 jobs:
   update_config:
