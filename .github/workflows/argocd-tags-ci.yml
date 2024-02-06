@@ -3,20 +3,25 @@ name: GlueOps Tags CI
 on:
   workflow_call:
     inputs:
-      STACK_REPO:
+      DEPLOYMENT_CONFIGS_APP_NAME:
+        required: false
+        type: string
+        default: ''
+        description: 'Optional override if the app name in deployment configurations does not match the repo name.'
+      DEPLOYMENT_CONFIGS_REPO:
         required: false
         type: string
         default: 'deployment-configurations'
-        description: 'The configuration repo for tenant applications on the GlueOps platform'
-      STACK_REPO_DEFAULT_BRANCH:
+        description: 'The deployment configuration repo for tenant applications on the GlueOps platform'
+      DEPLOYMENT_CONFIGS_REPO_DEFAULT_BRANCH:
         required: false
         type: string
         default: 'main'
-        description: 'The default branch of the configuration repo for tenant applications'
+        description: 'The default branch of the deployment configuration repo for tenant applications'
       ENV:
         required: true
         type: string
-        description: 'The application environment, conforming to the naming convention in the configuration repo for tenant applications.'
+        description: 'The application environment, conforming to the naming convention in the deployment configuration repo for applications.'
       CREATE_PR:
         required: true
         type: boolean
@@ -24,7 +29,7 @@ on:
     secrets:
       GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN:
         required: true
-        description: 'GitHub PAT to enable tenant configuration repo access.'
+        description: 'GitHub PAT to enable deployment configuration repo access.'
 
 jobs:
   update_config:
@@ -37,8 +42,8 @@ jobs:
     - name: Checkout Config Repo
       uses: actions/checkout@v3
       with:
-        repository: '${{ github.repository_owner }}/${{ inputs.STACK_REPO }}'
-        path: './${{ inputs.STACK_REPO }}'
+        repository: '${{ github.repository_owner }}/${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
+        path: './${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
         token: '${{ secrets.GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN }}'
 
     - name: Install yq
@@ -72,11 +77,12 @@ jobs:
         echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
     - name: Update Image Tag
-      working-directory: ./${{ inputs.STACK_REPO }}
+      working-directory: ./${{ inputs.DEPLOYMENT_CONFIGS_REPO }}
       run: |
         set -e
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
-        yq -i ".image.tag = \"$TAG\"" ./apps/${{ github.event.repository.name }}/envs/${{ inputs.ENV }}/values.yaml
+        DEPLOYMENT_CONFIGS_APP_NAME=${{ inputs.DEPLOYMENT_CONFIGS_APP_NAME || github.event.repository.name }}
+        yq -i ".image.tag = \"$TAG\"" ./apps/$DEPLOYMENT_CONFIGS_APP_NAME/envs/${{ inputs.ENV }}/values.yaml
         git config --global --add --bool push.autoSetupRemote true
         git config --local user.email "automated-github-action@glueops.dev"
         git config --local user.name "GlueOps bot"
@@ -88,14 +94,14 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN }}
-        path: './${{ inputs.STACK_REPO }}'
+        path: './${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
         title: '${{ github.event.repository.name }} [${{ inputs.ENV }}] > ${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
-        base: ${{ inputs.STACK_REPO_DEFAULT_BRANCH }}
+        base: ${{ inputs.DEPLOYMENT_CONFIGS_REPO_DEFAULT_BRANCH }}
         branch: '${{ github.event.repository.name }}/update-${{ inputs.ENV }}-image-tag-${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}'
         body: "PR created via CI workflow in [${{ github.repository_owner }}/${{ github.event.repository.name }}](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}) by [${{ github.actor }}](https://github.com/${{ github.actor }})"
     
     - name: Commit to Default Branch if PR not Desired
       if: ${{ ! inputs.CREATE_PR }}
-      working-directory: ./${{ inputs.STACK_REPO }}
+      working-directory: ./${{ inputs.DEPLOYMENT_CONFIGS_REPO }}
       run: |
         git push
