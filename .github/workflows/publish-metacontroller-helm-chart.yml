@@ -67,9 +67,9 @@ jobs:
           aws-region: ${{ inputs.AWS_REGION }}
 
       - name: Set up Helm
-        uses: mamezou-tech/setup-helmfile@v1.0.0
+        uses: mamezou-tech/setup-helmfile@v2
         with:
-          helm-version: "v3.12.3"
+          helm-version: "v3.14.0"
 
       - name: Package and Publish
         env:
