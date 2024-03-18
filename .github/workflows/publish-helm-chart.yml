@@ -63,7 +63,7 @@ jobs:
       - name: Set up Helm
         uses: mamezou-tech/setup-helmfile@v2
         with:
-          helm-version: "v3.14.0"
+          helm-version: "v3.14.3"
 
       - name: Package and Publish
         env:
