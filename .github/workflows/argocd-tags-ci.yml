@@ -37,10 +37,10 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Checkout Config Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: '${{ github.repository_owner }}/${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
         path: './${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
@@ -48,7 +48,7 @@ jobs:
 
     - name: Install yq
       run: |
-        wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64 -O yq
+        wget https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64 -O yq
         chmod +x yq
         sudo mv yq /usr/bin/yq
 
@@ -91,7 +91,7 @@ jobs:
 
     - name: Create PR if Desired
       if: ${{ inputs.CREATE_PR }}
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v6
       with:
         token: ${{ secrets.GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN }}
         path: './${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
