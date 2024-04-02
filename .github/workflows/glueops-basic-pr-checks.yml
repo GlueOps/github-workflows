@@ -1,0 +1,43 @@
+name: Publish Development Helm Charts
+
+on:
+  workflow_call:
+
+
+jobs:
+  PR_CHECKS_AND_LABELS:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Validate Conventional Commit Messages
+        uses: webiny/action-conventional-commits@8bc41ff4e7d423d56fa4905f6ff79209a78776c7 # v1.3.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Optional, for private repositories.
+          allowed-commit-types: "fix,docs,style,refactor,test,chore,pref,ci,chore,feat,breaking,major,revert"
+
+      - name: Add default PR Labels
+        uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5
+
+      - name: Assign PR Labels based on conventional commit messages
+        id: action-assign-labels
+        uses: mauroalderete/action-assign-labels@762b1609dfd32cc7549a39fb169f47742a994d13 # v1
+        with:
+          pull-request-number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          conventional-commits: |
+            conventional-commits:
+              - type: 'fix'
+                nouns: ['fix', 'docs', 'style', 'refactor', 'test', 'chore', 'pref', 'ci', 'chore']
+                labels: ['patch']
+              - type: 'feature'
+                nouns: ['feat']
+                labels: ['minor','enhancement']
+              - type: 'breaking_change'
+                nouns: ['breaking', 'major']
+                labels: ['major']
+          maintain-labels-not-matched: false
+          apply-changes: true
