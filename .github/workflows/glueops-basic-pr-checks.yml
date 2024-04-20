@@ -26,7 +26,7 @@ jobs:
 
       - name: Assign PR Labels based on conventional commit messages
         id: action-assign-labels
-        uses: mauroalderete/action-assign-labels@762b1609dfd32cc7549a39fb169f47742a994d13 # v1
+        uses: mauroalderete/action-assign-labels@671a4ca2da0f900464c58b8b5540a1e07133e915 # v1
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
