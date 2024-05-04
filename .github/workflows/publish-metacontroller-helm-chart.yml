@@ -23,19 +23,19 @@ jobs:
     runs-on: ubuntu-22.04
     environment: ${{ inputs.GLUEOPS_ENV }}
     steps:
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@cdcb36043654635271a94b9a6d1392de5bb323a7 # v5
         with:
           go-version: '1.21.7'
       - run: go version
 
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: clone metacontroller/metacontroller
         run: git clone --depth 1 --branch ${{ inputs.VERSION_TAG }} https://github.com/metacontroller/metacontroller.git 
 
       - name: Install Helm Docs
-        uses: envoy/install-helm-docs@v1.0.0
+        uses: envoy/install-helm-docs@05313083ef2cfaea27c4c3d7cb725242d22ea88b # v1.0.0
         with:
           version: 1.12.0
 
@@ -60,7 +60,7 @@ jobs:
           helm-docs -t README.md.gotmpl
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
