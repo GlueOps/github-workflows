@@ -80,6 +80,7 @@ jobs:
       working-directory: ./${{ inputs.DEPLOYMENT_CONFIGS_REPO }}
       run: |
         set -e
+        git pull --rebase
         TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
         DEPLOYMENT_CONFIGS_APP_NAME=${{ inputs.DEPLOYMENT_CONFIGS_APP_NAME || github.event.repository.name }}
         yq -i ".image.tag = \"$TAG\"" ./apps/$DEPLOYMENT_CONFIGS_APP_NAME/envs/${{ inputs.ENV }}/values.yaml
