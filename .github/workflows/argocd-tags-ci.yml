@@ -83,13 +83,12 @@ jobs:
         retry_on: error
         timeout_minutes: 2
         max_attempts: 3
-        working-directory: ./${{ inputs.DEPLOYMENT_CONFIGS_REPO }}
         command: |
           set -e
           git pull --rebase
           TAG=${{ steps.TagRelease.outputs.TAG || steps.TagNoRelease.outputs.TAG }}
           DEPLOYMENT_CONFIGS_APP_NAME=${{ inputs.DEPLOYMENT_CONFIGS_APP_NAME || github.event.repository.name }}
-          yq -i ".image.tag = \"$TAG\"" ./apps/$DEPLOYMENT_CONFIGS_APP_NAME/envs/${{ inputs.ENV }}/values.yaml
+          yq -i ".image.tag = \"$TAG\"" ./${{ inputs.DEPLOYMENT_CONFIGS_REPO }}/apps/$DEPLOYMENT_CONFIGS_APP_NAME/envs/${{ inputs.ENV }}/values.yaml
           git config --global --add --bool push.autoSetupRemote true
           git config --local user.email "automated-github-action@glueops.dev"
           git config --local user.name "GlueOps bot"
