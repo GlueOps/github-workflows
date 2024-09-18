@@ -98,7 +98,7 @@ jobs:
 
     - name: Create PR if Desired
       if: ${{ inputs.CREATE_PR }}
-      uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+      uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7
       with:
         token: ${{ secrets.GLUEOPS_DEPLOYMENT_CONFIGS_REPO_TOKEN }}
         path: './${{ inputs.DEPLOYMENT_CONFIGS_REPO }}'
