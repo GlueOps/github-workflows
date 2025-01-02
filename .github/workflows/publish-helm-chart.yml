@@ -1,4 +1,4 @@
-name: Publish Development Helm Charts
+name: Publish Helm Charts
 
 on:
   workflow_call:
