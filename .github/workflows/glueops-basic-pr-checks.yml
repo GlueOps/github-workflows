@@ -2,6 +2,7 @@ name: GlueOps Standard Checks
 
 on:
   workflow_call:
+  pull_request:
 
 
 jobs:
