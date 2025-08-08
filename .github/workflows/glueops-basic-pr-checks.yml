@@ -34,7 +34,7 @@ jobs:
           conventional-commits: |
             conventional-commits:
               - type: 'fix'
-                nouns: ['fix', 'docs', 'style', 'refactor', 'test', 'chore', 'pref', 'ci', 'chore']
+                nouns: ['fix', 'docs', 'style', 'refactor', 'test', 'chore', 'pref', 'ci', 'hotfix']
                 labels: ['patch']
               - type: 'feature'
                 nouns: ['feat']
