@@ -34,13 +34,13 @@ jobs:
           conventional-commits: |
             conventional-commits:
               - type: 'fix'
-                nouns: ['docs', 'style', 'refactor', 'test', 'chore', 'pref', 'ci', 'hotfix']
+                nouns: ['fix', 'docs', 'style', 'refactor', 'test', 'chore', 'pref', 'ci', 'hotfix']
                 labels: ['patch']
               - type: 'feature'
-                nouns: ['feat', 'fix(minor)']
+                nouns: ['feat']
                 labels: ['minor','enhancement']
               - type: 'breaking_change'
-                nouns: ['breaking', 'major']
+                nouns: ['breaking', 'major', 'BREAKING CHANGE']
                 labels: ['major']
           maintain-labels-not-matched: false
           apply-changes: true
