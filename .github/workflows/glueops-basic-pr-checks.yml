@@ -37,7 +37,7 @@ jobs:
                 nouns: ['fix', 'docs', 'style', 'refactor', 'test', 'chore', 'pref', 'ci', 'hotfix']
                 labels: ['patch']
               - type: 'feature'
-                nouns: ['feat']
+                nouns: ['feat', 'fix(minor)']
                 labels: ['minor','enhancement']
               - type: 'breaking_change'
                 nouns: ['breaking', 'major']
