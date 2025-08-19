@@ -40,7 +40,7 @@ jobs:
                 nouns: ['feat']
                 labels: ['minor','enhancement']
               - type: 'breaking_change'
-                nouns: ['breaking', 'major', 'BREAKING CHANGE']
+                nouns: ['breaking', 'major', 'BREAKING']
                 labels: ['major']
           maintain-labels-not-matched: false
           apply-changes: true
