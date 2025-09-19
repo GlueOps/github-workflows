@@ -6,6 +6,6 @@ jobs:
   auto-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudposse/github-action-auto-release@0d52315ead13f5f739cc864ec806c28a8a70b0d5 # v2
+      - uses: cloudposse/github-action-auto-release@725f1601ce164d51f2c1c19055126aef267fd08e # v4
         with:
           publish: false
