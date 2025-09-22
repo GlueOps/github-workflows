@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate Variables for Tags
-        uses: rlespinasse/github-slug-action@797d68864753cbceedc271349d402da4590e6302 # v4
+        uses: rlespinasse/github-slug-action@c33ff65466c58d57e4d796f88bb1ae0ff26ee453 # v5
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
