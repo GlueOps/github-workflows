@@ -2,9 +2,9 @@
 name: Bump version
 on:
   workflow_call:
-    secrets:
-      token:
-        required: true
+    # secrets:
+    #   token:
+    #     required: true
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -15,17 +15,17 @@ jobs:
       with:
         fetch-depth: '0'
 
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
-      id: tag_version
-      env:
-        GITHUB_TOKEN: ${{ secrets.token }} 
-        TAG_PREFIX: v
+    # - name: Bump version and push tag
+    #   uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+    #   id: tag_version
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.token }} 
+    #     TAG_PREFIX: v
 
-    - name: Create a GitHub release
-      uses: ncipollo/release-action@v1
-      with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: ${{ steps.tag_version.outputs.new_tag }}
-          generateReleaseNotes: true
-          allowUpdates: true
+    # - name: Create a GitHub release
+    #   uses: ncipollo/release-action@v1
+    #   with:
+    #       tag: ${{ steps.tag_version.outputs.new_tag }}
+    #       name: ${{ steps.tag_version.outputs.new_tag }}
+    #       generateReleaseNotes: true
+    #       allowUpdates: true
